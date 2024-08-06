@@ -1,18 +1,25 @@
 import * as vscode from "vscode";
 
+//入口函数
 export function activate(context: vscode.ExtensionContext) {
   const provider = new MyWebviewViewProvider(context.extensionUri);
-  vscode.window.showInformationMessage("Hello World from extension!");
-  context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider("myView", provider)
+  //注册视图
+  const registerCleaner = vscode.window.registerWebviewViewProvider(
+    "myView",
+    provider
   );
+
+  //注册清除资源
+  context.subscriptions.push(registerCleaner);
 }
 
+//webview Provider
 class MyWebviewViewProvider implements vscode.WebviewViewProvider {
   private _view?: vscode.WebviewView;
 
   constructor(private readonly _extensionUri: vscode.Uri) {}
 
+  // vscode 会调用这个函数
   public resolveWebviewView(
     webviewView: vscode.WebviewView,
     context: vscode.WebviewViewResolveContext,
